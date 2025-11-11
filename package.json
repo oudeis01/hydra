@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "vite build",
     "dev": "vite . --host",
-    "publish": "git subtree push --prefix=dist origin gh-pages"
+    "publish": "git subtree push --prefix=dist origin gh-pages",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "author": "",
   "license": "AGPL",
@@ -34,6 +37,7 @@
     "superagent": "^7.0.1"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.9.4",
     "browserify": "^17.0.0",
     "envify": "^4.1.0",
     "esmify": "^2.1.1",
