@@ -62,6 +62,30 @@
 
    console.log('Tauri helpers loaded: localFile(), loadVideo(source, path), loadImage(source, path), pickFile()');
  </script>
+ <script>
+   // Fullscreen toggle
+   window.toggleFullscreen = function() {
+     if (!document.fullscreenElement) {
+       document.documentElement.requestFullscreen().catch(err => {
+         console.error('Error attempting to enable fullscreen:', err);
+       });
+     } else {
+       if (document.exitFullscreen) {
+         document.exitFullscreen();
+       }
+     }
+   };
+
+   // Keyboard shortcut: F11 or Alt+Enter for fullscreen
+   document.addEventListener('keydown', function(e) {
+     if (e.key === 'F11' || (e.altKey && e.key === 'Enter')) {
+       e.preventDefault();
+       window.toggleFullscreen();
+     }
+   });
+
+   console.log('Fullscreen: Press F11 or Alt+Enter, or call toggleFullscreen()');
+ </script>
  <script src="./index.js" defer type="module"></script> 
  <link href="https://fonts.googleapis.com/css?family=Chivo:300,400,700" rel="stylesheet"> 
 <link rel="stylesheet" href="/css/fontawesome.css">
