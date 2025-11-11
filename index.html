@@ -17,6 +17,51 @@
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js" defer></script>
  <!-- <script src="./bundle.js?1.2wsdajk" defer></script>  -->
+ <script>
+   // Tauri local file helpers
+   window.localFile = function(path) {
+     if (window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.convertFileSrc) {
+       return window.__TAURI__.core.convertFileSrc(path);
+     }
+     return path;
+   };
+
+   // Convenience wrapper for loading local video
+   window.loadVideo = function(source, path) {
+     const url = window.localFile(path);
+     source.initVideo(url);
+     return source;
+   };
+
+   // Convenience wrapper for loading local image
+   window.loadImage = function(source, path) {
+     const url = window.localFile(path);
+     source.initImage(url);
+     return source;
+   };
+
+   // File picker dialog (if available)
+   window.pickFile = async function(options = {}) {
+     if (window.__TAURI__ && window.__TAURI__.dialog) {
+       try {
+         const selected = await window.__TAURI__.dialog.open({
+           multiple: false,
+           filters: options.filters || [
+             { name: 'Media', extensions: ['mp4', 'webm', 'mov', 'avi', 'jpg', 'jpeg', 'png', 'gif'] }
+           ]
+         });
+         if (selected) {
+           return window.localFile(selected);
+         }
+       } catch (err) {
+         console.error('File picker error:', err);
+       }
+     }
+     return null;
+   };
+
+   console.log('Tauri helpers loaded: localFile(), loadVideo(source, path), loadImage(source, path), pickFile()');
+ </script>
  <script src="./index.js" defer type="module"></script> 
  <link href="https://fonts.googleapis.com/css?family=Chivo:300,400,700" rel="stylesheet"> 
 <link rel="stylesheet" href="/css/fontawesome.css">
