@@ -62,30 +62,33 @@
 
    console.log('Tauri helpers loaded: localFile(), loadVideo(source, path), loadImage(source, path), pickFile()');
  </script>
- <script>
-   // Fullscreen toggle
-   window.toggleFullscreen = function() {
-     if (!document.fullscreenElement) {
-       document.documentElement.requestFullscreen().catch(err => {
-         console.error('Error attempting to enable fullscreen:', err);
-       });
-     } else {
-       if (document.exitFullscreen) {
-         document.exitFullscreen();
-       }
-     }
-   };
+  <script>
+    // Fullscreen toggle using Tauri API
+    window.toggleFullscreen = async function() {
+      if (window.__TAURI__ && window.__TAURI__.window) {
+        try {
+          const appWindow = window.__TAURI__.window.getCurrentWindow();
+          const isFullscreen = await appWindow.isFullscreen();
+          await appWindow.setFullscreen(!isFullscreen);
+          console.log('Fullscreen toggled:', !isFullscreen);
+        } catch (err) {
+          console.error('Error toggling fullscreen:', err);
+        }
+      } else {
+        console.error('Tauri API not available');
+      }
+    };
 
-   // Keyboard shortcut: F11 or Alt+Enter for fullscreen
-   document.addEventListener('keydown', function(e) {
-     if (e.key === 'F11' || (e.altKey && e.key === 'Enter')) {
-       e.preventDefault();
-       window.toggleFullscreen();
-     }
-   });
+    // Keyboard shortcut: F11 or Alt+Enter for fullscreen
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F11' || (e.altKey && e.key === 'Enter')) {
+        e.preventDefault();
+        window.toggleFullscreen();
+      }
+    });
 
-   console.log('Fullscreen: Press F11 or Alt+Enter, or call toggleFullscreen()');
- </script>
+    console.log('Fullscreen: Press F11 or Alt+Enter, or call toggleFullscreen()');
+  </script>
  <script src="./index.js" defer type="module"></script> 
  <link href="https://fonts.googleapis.com/css?family=Chivo:300,400,700" rel="stylesheet"> 
 <link rel="stylesheet" href="/css/fontawesome.css">

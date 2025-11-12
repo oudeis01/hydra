@@ -25,3 +25,8 @@ tauri = { version = "2.9.2", features = ["protocol-asset", "devtools"] }
 tauri-plugin-log = "2"
 tauri-plugin-dialog = "2.0"
 tauri-plugin-fs = "2.0"
+
+[profile.release]
+opt-level = 2
+lto = false
+codegen-units = 16
